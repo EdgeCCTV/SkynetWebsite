@@ -1474,3 +1474,131 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+.hero-stat .stat-figure,
+.stat-card .stat-figure {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.hero-stat .stat-figure {
+  font-size: 2.2rem;
+}
+
+.stat-card .stat-figure {
+  font-size: 2.5rem;
+}
+
+[data-theme="dark"] .hero-stat .stat-figure {
+  color: var(--primary);
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}
+
+.faq {
+  padding: 100px 0;
+  background: var(--bg-section);
+}
+
+.faq-list {
+  max-width: 760px;
+  margin-top: 28px;
+}
+
+.faq-item {
+  margin-bottom: 28px;
+}
+
+.faq-item h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.faq-item p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.page-hero {
+  padding: 150px 0 40px;
+  background: var(--bg-section);
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+}
+
+.page-hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.12;
+  margin-bottom: 16px;
+  max-width: 18ch;
+}
+
+.page-hero .lede {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 640px;
+  margin-bottom: 28px;
+}
+
+.page-body {
+  padding: 56px 0 80px;
+}
+
+.page-copy {
+  max-width: 760px;
+}
+
+.page-copy h2 {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  margin: 32px 0 12px;
+}
+
+.page-copy p,
+.page-copy li {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+.page-copy ul {
+  padding-left: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.page-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 28px;
+}
+
+.page-links a {
+  color: var(--primary);
+  font-weight: 600;
+}
