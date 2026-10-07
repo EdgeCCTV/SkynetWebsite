@@ -34,14 +34,14 @@ Indexed: `/`, `/about/`, `/remote-video-monitoring/`, `/alarm-verification/`, `/
 Not indexed, and leave them that way:
 
 - `http://skynetmonitoring.com/` — page with redirect (HTTP already 308s to HTTPS).
-- `https://www.skynetmonitoring.com/` — alternate page with proper canonical tag. `vercel.json` 308s `www` to the apex.
+- `https://www.skynetmonitoring.com/` — alternate page with proper canonical tag. The Vercel project domain `www` 308s to `skynetmonitoring.com` (set 2026-10-07). `skynet-website-two.vercel.app` 308s to the same apex. A host rule in `vercel.json` does not see `www`; keep this as a domain redirect.
 
 The one sitemap URL still out: `https://skynetmonitoring.com/virtual-escorts/` — discovered, never crawled (last crawl N/A). Indexing was requested 2026-10-07. Do not treat the email’s redirect and canonical reasons as failed pages.
 
 ## SEO decisions
 
 - Canonical host is `https://skynetmonitoring.com/` (apex, https, trailing slash).
-- `vercel.json` 308s `www` to the apex, `/index.html` to the directory URL, and slashless paths to the trailing-slash URL.
+- `vercel.json` 308s `/index.html` to the directory URL and slashless paths to the trailing-slash URL. `www` and the `*.vercel.app` project hostname are domain redirects, not rules in that file.
 - Homepage query: virtual guard monitoring in Atlanta.
 - Schema is `ProfessionalService` plus `Service` items. Do not put `serviceType` on the business. `sameAs` is omitted until Skynet has its own Google Business Profile or social URLs. Footer links to Edge CCTV and Security Camera Atlanta stay ordinary links.
 - Stats on the homepage are not headings.
