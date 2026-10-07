@@ -1,0 +1,21 @@
+{
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.skynetmonitoring.com" }],
+      "destination": "https://skynetmonitoring.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+/index.html",
+      "destination": "/:path+/",
+      "permanent": true
+    }
+  ]
+}
