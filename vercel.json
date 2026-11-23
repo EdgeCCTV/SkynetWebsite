@@ -10,6 +10,11 @@
       "source": "/:path+/index.html",
       "destination": "/:path+/",
       "permanent": true
+    },
+    {
+      "source": "/Skynet Inside Brocure FINAL.pdf",
+      "destination": "/skynet-monitoring-brochure.pdf",
+      "permanent": true
     }
   ]
 }

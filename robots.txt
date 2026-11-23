@@ -1,3 +1,10 @@
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
 User-agent: *
 Allow: /
+
 Sitemap: https://skynetmonitoring.com/sitemap.xml

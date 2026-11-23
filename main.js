@@ -151,34 +151,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Submit via FormSubmit
+            // Submit via FormSubmit AJAX endpoint
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Sending...';
 
             try {
+                const ajaxUrl = contactForm.action.includes('/ajax/')
+                    ? contactForm.action
+                    : contactForm.action.replace('https://formsubmit.co/', 'https://formsubmit.co/ajax/');
                 const formData = new FormData(contactForm);
-                const response = await fetch(contactForm.action, {
+                const response = await fetch(ajaxUrl, {
                     method: 'POST',
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 });
+                const data = await response.json().catch(() => ({}));
 
-                if (response.ok) {
+                if (response.ok && data.success !== 'false' && data.success !== false) {
                     formStatus.textContent = 'Thank you! We\'ll be in touch within 24 hours.';
                     formStatus.className = 'form-status success';
                     contactForm.reset();
+                    if (typeof gtag === 'function') {
+                        gtag('event', 'generate_lead', {
+                            form_location: window.location.pathname,
+                            method: 'formsubmit'
+                        });
+                    }
                 } else {
-                    throw new Error('Form submission failed');
+                    throw new Error(data.message || 'Form submission failed');
                 }
             } catch (err) {
                 // Fallback to mailto
+                const companyVal = document.getElementById('company')?.value || '';
+                const propVal = document.getElementById('property-type')?.value || '';
+                const msgVal = document.getElementById('message')?.value || '';
                 const subject = encodeURIComponent('Security Assessment Request from ' + name);
                 const body = encodeURIComponent(
-                    `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nCompany: ${document.getElementById('company').value}\nProperty Type: ${document.getElementById('property-type').value}\nMessage: ${document.getElementById('message').value}`
+                    `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nCompany: ${companyVal}\nProperty Type: ${propVal}\nSource: ${window.location.pathname}\nMessage: ${msgVal}`
                 );
                 window.location.href = `mailto:sales@skynetmonitoring.com?subject=${subject}&body=${body}`;
                 formStatus.textContent = 'Opening your email client...';
                 formStatus.className = 'form-status success';
+                if (typeof gtag === 'function') {
+                    gtag('event', 'generate_lead', {
+                        form_location: window.location.pathname,
+                        method: 'mailto_fallback'
+                    });
+                }
             }
 
             submitBtn.disabled = false;
@@ -187,19 +206,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- GA4 Click Conversion Events ---
+    document.addEventListener('click', (e) => {
+        if (typeof gtag !== 'function') return;
+        const link = e.target.closest('a');
+        if (!link) return;
+        const href = link.getAttribute('href') || '';
+        if (href.startsWith('tel:')) {
+            gtag('event', 'click_to_call', {
+                phone_number: '678-310-7570',
+                page_location: window.location.pathname
+            });
+        } else if (href.toLowerCase().endsWith('.pdf')) {
+            gtag('event', 'file_download', {
+                file_name: 'skynet-monitoring-brochure.pdf',
+                page_location: window.location.pathname
+            });
+        }
+    });
+
     // --- Animate stat numbers ---
     function animateCounter(element, target) {
-        // Handle special non-numeric values
-        if (target === '24/7') {
-            element.textContent = '24/7';
+        if (!/^(?:<|Up to )?\d+(?:\.\d+)?(?:\+|%|s)?$/i.test(target)) {
+            element.textContent = target;
             return;
         }
 
         const duration = 1500;
         const hasPercent = target.includes('%');
         const hasPlus = target.includes('+');
-        const hasLessThan = target.includes('<');
-        const hasSuffix = target.includes('s');
+        const hasSuffix = /s$/i.test(target);
+        const prefixMatch = target.match(/^(Up to |<)/i);
+        const prefix = prefixMatch ? prefixMatch[1] : '';
 
         const numericStr = target.replace(/[^0-9.]/g, '');
         const numericVal = parseFloat(numericStr);
@@ -226,7 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 display = Math.floor(current).toString();
             }
 
-            let prefix = hasLessThan ? '<' : '';
             let suffix = '';
             if (hasPercent) suffix = '%';
             if (hasPlus) suffix = '+';
@@ -245,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Observe stat cards for counter animation
-    const statElements = document.querySelectorAll('.stat-card h3, .hero-stat h3');
+    const statElements = document.querySelectorAll('.stat-card .stat-figure, .hero-stat .stat-figure');
 
     statElements.forEach(el => {
         // Store original value and set to placeholder
